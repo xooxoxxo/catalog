@@ -1,0 +1,59 @@
+---
+const steps = [
+  {
+    n: "1",
+    title: "Scan",
+    body: "One pass reads every package manager on your Mac into a single list. Homebrew, Cargo, npm, pipx, uv, Go, Bun and the App Store, deduplicated and searchable.",
+  },
+  {
+    n: "2",
+    title: "Understand",
+    body: "Point it at your own LLM and catalog writes a plain-English description, aliases and tags for each tool. A binary you don't recognise stops being a mystery.",
+  },
+  {
+    n: "3",
+    title: "Maintain",
+    body: "Then it audits: known CVEs, available updates, disk hogs, broken symlinks and PATH conflicts. Keep what earns its place; uninstall the rest with confidence.",
+  },
+];
+---
+<section class="section how" id="features" data-how>
+  <div class="how-stage">
+    <div class="container">
+      <div class="how-top">
+        <div class="how-intro">
+          <h2>From "what is<br />this binary?"<br />to a catalog you can trust.</h2>
+          <p class="lede">catalog takes stock of every developer tool you've installed, explains what each
+            one is, and tells you what's risky, stale, or just taking up space. Here's the loop.</p>
+        </div>
+        <div class="how-graphic" role="img" aria-label="A mysterious binary resolved into a known, tagged tool"></div>
+      </div>
+      <ol class="how-steps">
+        {steps.map((s) => (
+          <li class="how-step">
+            <span class="how-n mono">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+<style>
+  .how { padding-block: 0; }
+  .how-stage { min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    gap: clamp(40px, 6vh, 80px); padding-block: clamp(64px, 9vh, 110px); }
+  .how-top { display: grid; grid-template-columns: 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
+  @media (min-width: 900px) { .how-top { grid-template-columns: 1.1fr 0.9fr; } }
+  .how-intro { max-width: 44ch; }
+  .how-intro .lede { margin-top: 22px; }
+  .how-graphic { min-height: clamp(240px, 34vh, 400px);
+    background: url("/howitworks.png") center/contain no-repeat; }
+  .how-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(28px, 4vw, 48px); }
+  @media (min-width: 820px) { .how-steps { grid-template-columns: repeat(3, 1fr); } }
+  .how-step { padding-top: 24px; border-top: 2px solid var(--line2); }
+  .how-n { display: block; font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 14px; }
+  .how-step h3 { margin: 0 0 10px; }
+  .how-step p { margin: 0; color: var(--text-2); max-width: 38ch; }
+</style>

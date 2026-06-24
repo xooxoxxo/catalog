@@ -1,0 +1,9 @@
+---
+// The real Catalog brand mark (owl + wordmark), bundled with the app and copied
+// to /public/logo.png. It already contains the "CATALOG" wordmark, so it stands
+// alone; no separate text wordmark beside it.
+interface Props { size?: number; class?: string; }
+const { size = 40, class: cls } = Astro.props;
+---
+<img class={cls} src="/logo.png" width={size} height={size} alt="Catalog"
+     decoding="async" />

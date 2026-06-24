@@ -1,0 +1,52 @@
+.item-row { display: grid; grid-template-columns: 28px minmax(150px, 1fr) minmax(0, 2.2fr);
+  align-items: center; gap: 8px; padding: 8px 16px; font-size: 13px; cursor: pointer; box-sizing: border-box;
+  border-bottom: 1px solid var(--surface); transition: background-color 0.12s ease, box-shadow 0.12s ease; }
+.item-row:hover { background: var(--surface2); }
+.item-row.active { background: color-mix(in srgb, var(--accent) 10%, transparent); box-shadow: inset 2px 0 0 var(--accent); }
+.item-row .cell-name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-row .cell-source, .item-row .cell-version { color: var(--text-3); font-size: 12px; font-family: var(--mono);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Description + tag chips share the last cell: the LLM description yields first
+   (shrinks + ellipsis), the user's tags stay pinned and legible. */
+.item-row .cell-desc { color: var(--text-2); min-width: 0; display: flex; align-items: center; gap: 8px; overflow: hidden; }
+.item-row .cell-desc .desc-text { flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-row .cell-tags { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; }
+/* Muted neutral, NOT accent — the Rationed Accent Rule: accent pills belong to
+   the focused detail panel, not every one of hundreds of list rows. Square-ish
+   (radius-sm) so they read as data tokens, distinct from the accent pill. */
+.item-row .list-tag { font-size: 10.5px; line-height: 16px; color: var(--text-3); background: var(--surface2);
+  border: 1px solid var(--line2); border-radius: 999px; padding: 0 8px; white-space: nowrap; }
+.item-row .list-tag.more { color: var(--text-2); }
+.row-hidden { opacity: 0.45; }
+.star { cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-3);
+  border: 0; background: transparent; padding: 0; font: inherit; }
+.star.on { color: var(--accent); }
+.star[aria-pressed="true"] { color: var(--accent); }
+
+/* Keyboard cursor — the aria-activedescendant position. Distinct from .active
+   (the opened/selected row); uses outline so it never fights the active edge's
+   inset box-shadow. Reflects the accent focus-ring language. */
+.list-scroll:focus, .list-scroll:focus-visible { outline: none; }
+.item-row.cursor, .grp-head.cursor { outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: -2px; }
+.row-spin { display:inline-flex; width:14px; height:14px; align-items:center; justify-content:center; margin-left:5px; vertical-align:-2px; opacity:.6; flex:0 0 auto; color:var(--accent); }
+.up-badge { display: inline-flex; align-items: center; gap: 2px; font-family: var(--mono); font-size: 10px; font-weight: 700; color: var(--update); background: color-mix(in srgb, var(--update) 16%, transparent); border-radius:var(--radius-sm); padding: 1px 5px; margin-left: 4px; }
+.favorites { margin-bottom: 0; position: relative; z-index: 1; padding-right: 11px;
+  border-bottom: 1px solid var(--line); box-shadow: 0 8px 10px -10px rgba(0,0,0,.3); }
+/* Star + label sit flush (like the group header's caret + label) so "Favorites"
+   lines up with the collapsible group-header labels, not the row names. */
+.fav-head { display:flex; align-items:center; gap:8px;
+  padding:8px 16px 3px 4px; font-size:12px; color:var(--accent); text-transform:uppercase;
+  letter-spacing:.05em; font-weight:600; }
+.fav-head .fav-star { display:flex; align-items:center; justify-content:center; }
+/* Group-by section header inside the virtualized list */
+.grp-head { display:flex; align-items:center; gap:8px; width:100%; height:100%; padding:0 16px;
+  background:transparent; border:0; border-bottom:1px solid var(--line); cursor:pointer;
+  color:var(--text-3); font-family:var(--ui); font-size:11px; text-transform:uppercase;
+  letter-spacing:.06em; font-weight:600; text-align:left; }
+.grp-head:hover { color:var(--text-2); }
+.grp-head .grp-label { color:var(--text-2); }
+.grp-head .grp-count { margin-left:auto; color:var(--text-3); font-size:11px; }
+.group-label { font-size: 12px; color: var(--mauve); margin: 4px 0; text-transform: uppercase; letter-spacing: .05em; }
+.ghost { background: transparent; color: var(--text); border: 1px solid var(--surface); border-radius:var(--radius); padding: 6px 10px; cursor: pointer; white-space: nowrap; }
+.ghost:hover { background: var(--surface); }

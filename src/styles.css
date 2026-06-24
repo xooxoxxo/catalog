@@ -1,0 +1,10 @@
+/* Global styles, split by area. Imported in cascade order — do not reorder.
+   tokens → base → list → detail → audits → toolbar → overlays → panels. */
+@import "./styles/tokens.css"; /* design tokens + light/dark theme variables */
+@import "./styles/base.css"; /* reset, app shell, workspace, scrollbar, sidebar frame */
+@import "./styles/list.css"; /* item rows, stars, favorites, group headers */
+@import "./styles/detail.css"; /* detail panel, shared form controls, chips, tag editor */
+@import "./styles/audits.css"; /* doctor, updates view, progress bar */
+@import "./styles/toolbar.css"; /* toolbar, buttons, segmented groups, icon badges */
+@import "./styles/overlays.css"; /* command palette, popovers, sheets, skeletons, empty state */
+@import "./styles/panels.css"; /* disk, export, security, deps, settings, github, themes, describe, stars, readme */

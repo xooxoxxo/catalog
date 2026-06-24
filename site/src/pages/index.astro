@@ -1,0 +1,85 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Story from "../components/Story.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import CatalogDemo from "../components/CatalogDemo.astro";
+import DescribeDemo from "../components/DescribeDemo.astro";
+import FeatureSplit from "../components/FeatureSplit.astro";
+import Audits from "../components/Audits.astro";
+import ThemeLab from "../components/ThemeLab.astro";
+import GithubVisual from "../components/GithubVisual.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
+import { fetchStarCount } from "../lib/stars";
+import { STAR_FLOOR, SITE_URL, REPO_URL, RELEASES_LATEST_URL, XO_URL } from "../config";
+
+const stars = (await fetchStarCount({ token: process.env.GITHUB_TOKEN })) ?? STAR_FLOOR;
+
+const softwareLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Catalog",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS",
+  description:
+    "Catalog indexes every tool on your Mac across every package manager, with AI descriptions, CVE scanning, updates, disk and dependency audits, and a keyboard-first UI.",
+  url: SITE_URL,
+  downloadUrl: RELEASES_LATEST_URL,
+  license: "https://opensource.org/licenses/MIT",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Organization", name: "xo.vision", url: XO_URL },
+  sameAs: [REPO_URL],
+};
+const faqs = [
+  ["Is catalog free?", "Yes. It's free and open source under the MIT license."],
+  ["What do I need to run it?", "A Mac. catalog is a native macOS desktop app built with Tauri."],
+  ["Which package managers does it scan?", "Homebrew, Cargo, npm, pipx, uv, Go, Bun and the Mac App Store."],
+  ["Does it send my data anywhere?", "No. Your catalog lives locally; the only network calls are ones you opt into (CVE lookups, GitHub, and the AI describe step you configure)."],
+  ["Do I need an API key for the AI descriptions?", "No keys are baked in. You bring your own provider: the claude or codex CLIs, a local ollama model, or any custom command."],
+];
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+---
+<Base title="Catalog: Every tool you forgot you installed."
+      description="Catalog indexes every tool on your Mac across every package manager, with AI descriptions, CVE scanning, updates, disk and dependency audits, and a keyboard-first UI you can make your own. Free and open source.">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  </Fragment>
+  <Nav />
+  <div class="fold">
+    <Hero stars={stars} />
+  </div>
+  <Story />
+  <HowItWorks />
+  <CatalogDemo />
+  <DescribeDemo />
+  <Audits />
+  <ThemeLab />
+
+  <FeatureSplit
+    title="Your stars within reach."
+    body="Connect your GitHub account to browse the repos you've starred, read their READMEs inline, and star or unstar without leaving the app."
+    highlights={[
+      { label: "Device-flow login.", desc: "OAuth device code; the token lives in the macOS Keychain, never the web layer." },
+      { label: "Stars & READMEs.", desc: "Browse starred repos and read their docs inline." },
+    ]}
+  >
+    <Fragment slot="title">
+      Your <svg class="gh-star" viewBox="0 0 24 24" role="img" aria-label="stars"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg> within reach.
+    </Fragment>
+    <GithubVisual />
+  </FeatureSplit>
+
+  <Faq />
+  <Footer />
+</Base>

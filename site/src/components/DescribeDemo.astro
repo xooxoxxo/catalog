@@ -1,0 +1,75 @@
+---
+// "Know what each one does." — pinned; on scroll an empty item is "Described":
+// button press -> loading -> filled description + tags. Driven by motion.ts.
+const highlights = [
+  { label: "Bring your own provider.", desc: "The claude or codex CLIs, a local ollama model, or any custom command." },
+  { label: "No keys baked in.", desc: "You decide which model sees your list; ollama keeps it fully offline." },
+  { label: "Metadata only.", desc: "Prompts use name, version, source and path. catalog never runs your binaries." },
+  { label: "Batch describe.", desc: "Enrich one tool or your entire catalog in a single pass." },
+];
+---
+<section class="section demo demo-rev" data-describe-demo>
+  <div class="demo-stage">
+    <div class="container feat-grid">
+      <div class="feat-copy">
+        <h2>Know what each one does.</h2>
+        <p class="lede">Point catalog at your own LLM and it writes a plain-English description, aliases
+          and tags for every tool, one at a time or the whole catalog at once.</p>
+        <ul class="feat-list">
+          {highlights.map((h) => (
+            <li><span class="feat-dot" aria-hidden="true"></span><span><b>{h.label}</b> {h.desc}</span></li>
+          ))}
+        </ul>
+      </div>
+      <div class="feat-visual">
+        <div class="dd" aria-hidden="true">
+          <div class="dd-head">
+            <span class="dd-name">fd</span>
+            <span class="dd-meta mono">brew · 10.2.0</span>
+            <span class="dd-btn" data-dd-btn><span class="dd-btn-label">Describe</span></span>
+          </div>
+          <div class="dd-body">
+            <p class="dd-empty" data-dd-empty>No description yet.</p>
+            <div class="dd-spinner" data-dd-spinner><span class="dd-ring"></span><span>Describing…</span></div>
+            <div class="dd-filled" data-dd-filled>
+              <p class="dd-desc" data-dd-desc>A fast, user-friendly alternative to <span class="mono">find</span>:
+                recursive, respects <span class="mono">.gitignore</span>, colorized output.</p>
+              <div class="dd-tags">
+                <span class="dd-tag" data-dd-tag>cli</span>
+                <span class="dd-tag" data-dd-tag>search</span>
+                <span class="dd-tag" data-dd-tag>rust</span>
+                <span class="dd-tag" data-dd-tag>files</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .demo-rev .feat-copy { order: 1; }
+  @media (min-width: 900px) { .demo-rev .feat-copy { order: 2; } }
+  .dd { background: var(--surface); border: 1px solid var(--line2); border-radius: var(--radius-lg);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); overflow: hidden; }
+  .dd-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .dd-name { font-weight: 600; font-size: 1.05rem; color: var(--text); }
+  .dd-meta { font-size: 12px; color: var(--text-3); }
+  .dd-btn { margin-left: auto; display: inline-flex; align-items: center; height: 32px; padding: 0 14px;
+    border-radius: var(--radius); background: var(--accent); color: var(--accent-fg); font-size: 12.5px;
+    font-weight: 600; cursor: default; }
+  .dd-body { position: relative; padding: 18px; min-height: 132px; }
+  .dd-empty { margin: 0; color: var(--text-3); font-style: italic; font-size: 13px; }
+  .dd-spinner { position: absolute; inset: 18px; display: flex; align-items: center; gap: 10px;
+    color: var(--text-3); font-size: 13px; opacity: 0; }
+  .dd-ring { width: 16px; height: 16px; border-radius: 999px; border: 2px solid var(--line2);
+    border-top-color: var(--accent); animation: ddspin .8s linear infinite; }
+  @keyframes ddspin { to { transform: rotate(360deg); } }
+  .dd-filled { opacity: 0; }
+  .dd-desc { margin: 0 0 14px; font-size: 13.5px; line-height: 1.55; color: var(--text); }
+  .dd-desc .mono { color: var(--text-2); }
+  .dd-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .dd-tag { font-size: 11px; color: var(--accent); background: color-mix(in srgb, var(--accent) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent); border-radius: 999px; padding: 2px 10px; }
+  @media (prefers-reduced-motion: reduce) { .dd-ring { animation: none; } }
+</style>

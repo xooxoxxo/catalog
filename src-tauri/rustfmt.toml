@@ -1,0 +1,2 @@
+# Edition specified; all formatting options use Rust defaults to maintain stable output.
+edition = "2021"

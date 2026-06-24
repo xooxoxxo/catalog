@@ -1,0 +1,152 @@
+---
+// The centerpiece: a pinned scroll-story. The headline builds word by word while
+// a side list floods with package names, then some pop as CVEs, some fade
+// (forgotten), some flag updates, ending on "a handful". motion.ts drives it;
+// without JS / reduced-motion it renders as a static statement + dense list.
+const line1 = "You've installed hundreds of tools.".split(" ");
+const line2 = "You remember maybe a handful.".split(" ");
+
+// flag: "cve" | "update" | "forgotten" | "keep" | undefined
+const pkgs = [
+  { n: "ripgrep", s: "brew", f: "keep" }, { n: "fd", s: "brew" }, { n: "fzf", s: "brew", f: "keep" },
+  { n: "bat", s: "brew" }, { n: "eza", s: "brew" }, { n: "zoxide", s: "cargo" },
+  { n: "git-delta", s: "cargo", f: "keep" }, { n: "jq", s: "brew", f: "cve" }, { n: "yq", s: "brew", f: "forgotten" },
+  { n: "gh", s: "brew", f: "cve" }, { n: "glab", s: "brew", f: "forgotten" }, { n: "lazygit", s: "brew", f: "keep" },
+  { n: "lazydocker", s: "brew" }, { n: "htop", s: "brew", f: "cve" }, { n: "btop", s: "brew" },
+  { n: "procs", s: "cargo" }, { n: "dust", s: "cargo", f: "cve" }, { n: "duf", s: "brew" },
+  { n: "ncdu", s: "brew", f: "forgotten" }, { n: "neovim", s: "brew", f: "keep" }, { n: "tmux", s: "brew" },
+  { n: "zellij", s: "cargo" }, { n: "starship", s: "brew" }, { n: "direnv", s: "brew" },
+  { n: "mise", s: "brew" }, { n: "asdf", s: "brew", f: "forgotten" }, { n: "fnm", s: "brew" },
+  { n: "volta", s: "npm", f: "forgotten" }, { n: "pnpm", s: "npm" }, { n: "yarn", s: "npm", f: "forgotten" },
+  { n: "bun", s: "brew" }, { n: "deno", s: "brew", f: "update" }, { n: "uv", s: "brew" },
+  { n: "ruff", s: "pipx" }, { n: "black", s: "pipx", f: "update" }, { n: "mypy", s: "pipx" },
+  { n: "poetry", s: "pipx" }, { n: "httpie", s: "pipx" }, { n: "xh", s: "cargo" },
+  { n: "wget", s: "brew" }, { n: "aria2", s: "brew", f: "forgotten" }, { n: "rclone", s: "brew" },
+  { n: "rsync", s: "brew" }, { n: "croc", s: "brew" }, { n: "ffmpeg", s: "brew", f: "cve" },
+  { n: "imagemagick", s: "brew", f: "cve" }, { n: "pandoc", s: "brew" }, { n: "hugo", s: "brew" },
+  { n: "zola", s: "cargo" }, { n: "caddy", s: "brew" }, { n: "nginx", s: "brew", f: "cve" },
+  { n: "mkcert", s: "brew" }, { n: "step", s: "brew" }, { n: "age", s: "brew" },
+  { n: "sops", s: "brew" }, { n: "gnupg", s: "brew", f: "cve" }, { n: "openssl", s: "brew", f: "cve" },
+  { n: "hyperfine", s: "cargo" }, { n: "tokei", s: "cargo" }, { n: "scc", s: "go", f: "forgotten" },
+  { n: "watchexec", s: "cargo" }, { n: "entr", s: "brew" }, { n: "just", s: "cargo" },
+  { n: "task", s: "go", f: "update" }, { n: "cmake", s: "brew", f: "update" }, { n: "ninja", s: "brew" },
+  { n: "bazelisk", s: "brew", f: "forgotten" }, { n: "sccache", s: "cargo" }, { n: "mold", s: "brew" },
+  { n: "llvm", s: "brew", f: "update" }, { n: "rustup", s: "brew" }, { n: "cargo-watch", s: "cargo" },
+  { n: "cargo-nextest", s: "cargo" }, { n: "tealdeer", s: "cargo" }, { n: "navi", s: "brew" },
+  { n: "broot", s: "cargo" }, { n: "lf", s: "go", f: "forgotten" }, { n: "nnn", s: "brew" },
+  { n: "yazi", s: "cargo" }, { n: "helix", s: "brew" }, { n: "micro", s: "brew", f: "forgotten" },
+  { n: "tig", s: "brew" }, { n: "gitui", s: "cargo" }, { n: "difftastic", s: "cargo" },
+  { n: "sd", s: "cargo" }, { n: "choose", s: "cargo" }, { n: "gron", s: "brew" },
+  { n: "dasel", s: "brew" }, { n: "miller", s: "brew", f: "forgotten" }, { n: "vegeta", s: "go" },
+  { n: "nmap", s: "brew" }, { n: "wireshark", s: "brew", f: "cve" }, { n: "tcpdump", s: "brew" },
+  { n: "mtr", s: "brew", f: "forgotten" }, { n: "gping", s: "cargo" }, { n: "bandwhich", s: "cargo" },
+  { n: "k9s", s: "brew", f: "keep" }, { n: "kubectl", s: "brew", f: "update" }, { n: "helm", s: "brew" },
+  { n: "kustomize", s: "brew", f: "forgotten" }, { n: "kind", s: "go" }, { n: "minikube", s: "brew", f: "forgotten" },
+  { n: "stern", s: "brew" }, { n: "dive", s: "brew" }, { n: "terraform", s: "brew", f: "update" },
+  { n: "terragrunt", s: "brew" }, { n: "packer", s: "brew", f: "forgotten" }, { n: "vault", s: "brew", f: "cve" },
+  { n: "consul", s: "brew", f: "forgotten" }, { n: "nomad", s: "brew", f: "forgotten" }, { n: "flyctl", s: "brew" },
+  { n: "vercel", s: "npm", f: "update" }, { n: "wrangler", s: "npm" }, { n: "awscli", s: "brew", f: "update" },
+  { n: "gcloud", s: "brew" }, { n: "doctl", s: "brew", f: "forgotten" }, { n: "eksctl", s: "brew" },
+  { n: "podman", s: "brew" }, { n: "colima", s: "brew" }, { n: "lima", s: "brew", f: "forgotten" },
+  { n: "ctop", s: "brew" }, { n: "skaffold", s: "brew", f: "forgotten" }, { n: "tilt", s: "brew" },
+  { n: "cosign", s: "brew" }, { n: "trivy", s: "brew" }, { n: "grype", s: "go" },
+  { n: "syft", s: "go" }, { n: "semgrep", s: "pipx" }, { n: "gitleaks", s: "brew" },
+  { n: "trufflehog", s: "brew" }, { n: "hadolint", s: "brew", f: "forgotten" }, { n: "shellcheck", s: "brew" },
+  { n: "shfmt", s: "go" }, { n: "yamllint", s: "pipx" }, { n: "actionlint", s: "go" },
+  { n: "biome", s: "npm" }, { n: "prettier", s: "npm", f: "update" }, { n: "eslint", s: "npm" },
+  { n: "stylelint", s: "npm", f: "forgotten" }, { n: "openvpn", s: "brew", f: "cve" }, { n: "wireguard-tools", s: "brew" },
+  { n: "redis", s: "brew", f: "cve" }, { n: "postgresql", s: "brew", f: "update" }, { n: "sqlite", s: "brew" },
+  { n: "duckdb", s: "brew" }, { n: "litecli", s: "pipx" }, { n: "pgcli", s: "pipx", f: "forgotten" },
+  { n: "usql", s: "go" }, { n: "mycli", s: "pipx", f: "forgotten" }, { n: "redli", s: "brew" },
+  { n: "curl", s: "brew", f: "cve" }, { n: "git", s: "brew", f: "cve" }, { n: "node", s: "brew", f: "cve" },
+  { n: "python@3.12", s: "brew", f: "update" }, { n: "ruby", s: "brew", f: "forgotten" }, { n: "php", s: "brew", f: "cve" },
+  { n: "perl", s: "brew", f: "forgotten" }, { n: "openldap", s: "brew", f: "cve" }, { n: "libssh2", s: "brew", f: "cve" },
+  { n: "libxml2", s: "brew" }, { n: "zlib", s: "brew", f: "cve" }, { n: "expat", s: "brew", f: "cve" },
+  { n: "freetype", s: "brew", f: "update" }, { n: "harfbuzz", s: "brew" }, { n: "ghostscript", s: "brew", f: "cve" },
+  { n: "imagemagick@6", s: "brew", f: "forgotten" }, { n: "p7zip", s: "brew", f: "forgotten" }, { n: "unrar", s: "brew", f: "cve" },
+  { n: "neofetch", s: "brew", f: "forgotten" }, { n: "cmatrix", s: "brew", f: "forgotten" }, { n: "asciinema", s: "pipx" },
+  { n: "glow", s: "brew" }, { n: "vhs", s: "brew" }, { n: "gum", s: "brew" },
+  { n: "fx", s: "npm" }, { n: "ttyd", s: "brew", f: "cve" }, { n: "mosh", s: "brew", f: "update" },
+];
+const riskCount = pkgs.filter((p) => p.f === "cve").length;
+---
+<section class="story" data-story aria-label="You've installed hundreds of tools">
+  <div class="story-stage">
+    <div class="container story-grid">
+      <div class="story-copy">
+        <h2 class="story-h">
+          <span class="sline">
+            {line1.map((w) => (
+              <Fragment><span class="sword">{[...w].map((c) => <span class="sletter">{c}</span>)}</span>{" "}</Fragment>
+            ))}
+          </span>
+          <span class="sline sline-dim">
+            {line2.map((w) => (
+              <Fragment><span class="sword">{[...w].map((c) => <span class="sletter">{c}</span>)}</span>{" "}</Fragment>
+            ))}
+          </span>
+        </h2>
+        <p class="story-count">
+          <b class="story-num" data-count="347">347</b> tools, and counting.
+          <span class="story-risk"><b>{riskCount}</b> with security issues</span>
+        </p>
+      </div>
+      <div class="story-list-wrap" aria-hidden="true">
+        <ul class="story-list" data-flood>
+          {pkgs.map((p) => (
+            <li class={`pkg${p.f ? ` pkg--${p.f}` : ""}`}>
+              <span class="pkg-name">{p.n}</span>
+              <span class="pkg-src">{p.s}</span>
+              <span class="pkg-flag" aria-hidden="true"></span>
+            </li>
+          ))}
+        </ul>
+        <div class="story-list-fade" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .story { position: relative; }
+  .story-stage { display: flex; align-items: center; min-height: 100vh; padding-block: clamp(64px, 10vh, 120px); }
+  .story-grid { display: grid; grid-template-columns: 1fr; gap: clamp(36px, 6vw, 64px); align-items: center; width: 100%; }
+  @media (min-width: 900px) { .story-grid { grid-template-columns: 1.05fr 0.95fr; } }
+
+  .story-h { font-size: clamp(2.4rem, 6.2vw, 5rem); line-height: 1.0; letter-spacing: -0.03em; }
+  .sline { display: block; }
+  .sline-dim { color: var(--text-3); }
+  .sword { display: inline-block; white-space: nowrap; }
+  .sletter { display: inline; }
+  .story-count { margin-top: 28px; font-size: 1.05rem; color: var(--text-2); }
+  .story-num { font-family: var(--mono); color: var(--accent); font-weight: 700; }
+  .story-risk { display: inline-block; margin-left: 4px; opacity: 0; color: var(--danger); }
+  .story-risk::before { content: "\00B7"; margin-right: 8px; color: var(--text-3); }
+  .story-risk b { font-family: var(--mono); font-weight: 700; }
+
+  /* Flood list — a dense, clipped wall of names. */
+  .story-list-wrap { position: relative; height: min(74vh, 620px); overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 8%, #000 82%, transparent);
+    mask-image: linear-gradient(180deg, transparent, #000 8%, #000 82%, transparent); }
+  .story-list { list-style: none; margin: 0; padding: 0 14px; font-size: var(--pkg-fs, 13px);
+    column-count: 2; column-gap: 32px; }
+  .pkg { display: flex; align-items: center; gap: 10px; padding: 0.5em 8px;
+    border-bottom: 1px solid var(--line); break-inside: avoid; border-radius: 4px; }
+  .pkg-name { color: var(--text-2); font-weight: 500; }
+  .pkg-src { font-family: var(--mono); font-size: 0.8em; color: var(--text-3); margin-left: auto; }
+  .pkg-flag { width: 0; flex: 0 0 auto; }
+  .pkg--keep .pkg-name { color: var(--text); }
+
+  /* Story beats — toggled by motion.ts via .story--alerts at the right scroll point. */
+  .pkg-flag::after { font-size: 0.85em; }
+  .story--alerts .pkg--cve .pkg-flag, .story--alerts .pkg--update .pkg-flag { width: auto; margin-left: 6px; }
+  .story--alerts .pkg--cve .pkg-name { color: var(--danger); }
+  .story--alerts .pkg--cve .pkg-flag::after { content: "\26A0"; color: var(--danger); }
+  .story--alerts .pkg--update .pkg-flag::after { content: "\25B2"; color: var(--update); font-family: var(--mono); }
+  .story--alerts .pkg--cve { background: color-mix(in srgb, var(--danger) 9%, transparent);
+    box-shadow: inset 2px 0 0 var(--danger); animation: cvepulse 1.7s ease-in-out infinite; }
+  @keyframes cvepulse {
+    0%, 100% { box-shadow: inset 2px 0 0 var(--danger), 0 0 10px -4px color-mix(in srgb, var(--danger) 80%, transparent); }
+    50% { box-shadow: inset 2px 0 0 var(--danger), 0 0 22px -2px var(--danger); }
+  }
+  @media (prefers-reduced-motion: reduce) { .story--alerts .pkg--cve { animation: none; } }
+</style>

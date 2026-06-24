@@ -1,0 +1,20 @@
+---
+const line1 = "You've installed hundreds of tools.".split(" ");
+const line2 = "You remember maybe a handful.".split(" ");
+---
+<section class="section problem">
+  <div class="container">
+    <h2 class="problem-statement">
+      {line1.map((w) => <span class="scrub-word">{w} </span>)}
+      <br />
+      <span class="muted">{line2.map((w) => <span class="scrub-word">{w} </span>)}</span>
+    </h2>
+    <p class="lede reveal">Every <code>brew install</code>, every <code>cargo install</code>, every npm global leaves
+      something behind. Catalog finds all of it and makes it legible again.</p>
+  </div>
+</section>
+<style>
+  .problem .muted { color: var(--text-3); }
+  .problem .lede { margin-top: 24px; }
+  .problem code { font-family: var(--mono); font-size: 0.9em; color: var(--text-2); }
+</style>

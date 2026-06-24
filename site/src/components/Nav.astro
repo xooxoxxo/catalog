@@ -1,0 +1,39 @@
+---
+import OwlMark from "./OwlMark.astro";
+import { REPO_URL, RELEASES_LATEST_URL } from "../config";
+---
+<header class="nav" data-nav>
+  <a class="nav-mark" href="/" aria-label="Catalog home">
+    <OwlMark size={26} />
+    <img class="wm-img" src="/wordmark.png" alt="" width="1007" height="388" />
+  </a>
+  <nav class="nav-actions">
+    <a class="nav-link" href={REPO_URL} target="_blank" rel="noopener">GitHub</a>
+    <a class="btn btn-primary nav-dl" href={RELEASES_LATEST_URL} target="_blank" rel="noopener">Download</a>
+  </nav>
+</header>
+<style>
+  .nav { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px; padding: 12px clamp(16px, 4vw, 32px);
+    background: color-mix(in srgb, var(--bg) 72%, transparent); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    transition: transform .45s cubic-bezier(.16,1,.3,1), opacity .45s ease; }
+  /* Hidden over the hero (only when armed pre-paint, so no flash and
+     reduced-motion / no-JS keep it visible). Revealed once scrolled past. */
+  :global(.nav-armed) .nav { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  :global(.nav-armed) .nav.nav--shown { transform: none; opacity: 1; pointer-events: auto; }
+  .nav-mark { display: inline-flex; align-items: center; gap: 9px; color: var(--accent);
+    text-decoration: none; }
+  .nav-mark .wm-img { height: 17px; width: auto; display: block; }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .nav-link { color: var(--text-2); text-decoration: none; font-size: 0.9rem; padding: 8px 12px;
+    border-radius: var(--radius-sm); transition: color .2s, background-color .2s; }
+  .nav-link:hover { color: var(--text); background: var(--surface2); }
+  .nav-dl { height: 38px; padding: 0 16px; font-size: 0.88rem; }
+  @media (prefers-reduced-motion: reduce) { .nav { transition: none; } }
+  @media (max-width: 768px) {
+    .nav-mark { gap: 11px; }
+    .nav-mark .owlmark { width: 32px; height: 32px; }
+    .nav-mark .wm-img { height: 21px; }
+  }
+</style>

@@ -1,0 +1,17 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#181825"/>
+      <stop offset="1" stop-color="#1e1e2e"/>
+    </linearGradient>
+  </defs>
+  <!-- macOS squircle-ish rounded base on transparent corners -->
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#bg)"/>
+  <!-- 2x2 catalog tiles -->
+  <rect x="184" y="184" width="300" height="300" rx="56" fill="#cba6f7"/>
+  <rect x="540" y="184" width="300" height="300" rx="56" fill="#89b4fa"/>
+  <rect x="184" y="540" width="300" height="300" rx="56" fill="#a6e3a1"/>
+  <rect x="540" y="540" width="300" height="300" rx="56" fill="#fab387"/>
+  <!-- favorites star carved into the mauve tile -->
+  <path d="M334,239 L356.3,303.3 L424.4,304.6 L370.1,345.7 L389.8,410.9 L334,372 L278.2,410.9 L297.9,345.7 L243.6,304.6 L311.7,303.3 Z" fill="#1e1e2e"/>
+</svg>

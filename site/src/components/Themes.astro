@@ -1,0 +1,53 @@
+---
+import AppWindow from "./AppWindow.astro";
+---
+<section class="section theme-paper themes">
+  <div class="container themes-grid">
+    <div class="themes-copy reveal">
+      <h2>Make it yours.</h2>
+      <p class="lede">catalog is your tool, not ours. Edit every color token, swap the font and corner
+        radius, or generate a whole palette from a one-word "vibe" with AI. Keep up to twenty of your
+        own, and share them as a file a teammate opens with a double-click.</p>
+      <div class="themes-toggle" role="group" aria-label="Try a starting theme">
+        <button type="button" data-theme-btn="paper" class="btn btn-ghost is-active" aria-pressed="true">Paper</button>
+        <button type="button" data-theme-btn="noir" class="btn btn-ghost" aria-pressed="false">Noir</button>
+      </div>
+      <p class="themes-hint">Two themes ship. Make twenty more.</p>
+    </div>
+    <div class="themes-window reveal" data-theme-window>
+      <AppWindow theme="paper" />
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var wrap = document.querySelector("[data-theme-window] .aw");
+    var btns = document.querySelectorAll("[data-theme-btn]");
+    if (!wrap || !btns.length) return;
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () {
+        // paper button → add .theme-paper (light); noir button → remove it (dark)
+        var paper = b.getAttribute("data-theme-btn") === "paper";
+        wrap.classList.toggle("theme-paper", paper);
+        btns.forEach(function (o) {
+          var on = o === b;
+          o.classList.toggle("is-active", on);
+          o.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .themes { background: var(--bg); color: var(--text); }
+  .themes-grid { display: grid; grid-template-columns: 1fr; gap: clamp(36px, 6vw, 64px); align-items: center; }
+  @media (min-width: 900px) { .themes-grid { grid-template-columns: 1fr 1fr; } }
+  .themes-toggle { display: flex; gap: 10px; margin-top: 24px; }
+  .themes-toggle .is-active { border-color: var(--accent); color: var(--accent); }
+  .themes-hint { margin-top: 12px; font-size: 0.85rem; color: var(--text-3); }
+  /* The window transitions its own colors when the class flips. */
+  .themes-window .aw, .themes-window .aw * { transition: background-color .25s, color .25s, border-color .25s; }
+  @media (prefers-reduced-motion: reduce) { .themes-window .aw, .themes-window .aw * { transition: none; } }
+</style>

@@ -1,0 +1,80 @@
+---
+import { REPO_URL } from "../config";
+const faqs = [
+  {
+    q: "Is catalog free?",
+    a: "Yes, completely. It's free and open source under the MIT license, so you can read every line, fork it, or build it yourself.",
+  },
+  {
+    q: "What do I need to run it?",
+    a: "A Mac. catalog is a native macOS desktop app built with Tauri 2. There's no Windows or Linux build today.",
+  },
+  {
+    q: "Which package managers does it scan?",
+    a: "Homebrew, Cargo, npm, pipx, uv, Go, Bun, and the Mac App Store (mas). Each tool is deduplicated into one searchable list.",
+  },
+  {
+    q: "Does it send my data anywhere?",
+    a: "No. Your catalog lives in a local database on your Mac. The only network calls are ones you opt into: CVE lookups, GitHub, and the AI describe step, which runs through a provider you choose.",
+  },
+  {
+    q: "Do I need an API key for the AI descriptions?",
+    a: "No keys are baked in. You bring your own provider: the claude or codex CLIs, a local ollama model, or any custom command. With ollama it runs fully offline, and prompts are built only from metadata, never by running your binaries.",
+  },
+  {
+    q: "How does the security scan work?",
+    a: "It checks your installed versions against known CVEs, including a dedicated Homebrew pass. An optional NVD API key raises the rate limit, but isn't required.",
+  },
+  {
+    q: "Does the GitHub login need my password?",
+    a: "No. It uses GitHub's device-flow OAuth; the token is stored in the macOS Keychain and is never exposed to the web layer.",
+  },
+  {
+    q: "Can I make it look the way I want?",
+    a: "Yes. Pick light and dark defaults, edit a full custom theme (colors, font, corner radius), generate a palette from a 'vibe' with AI, and import or export themes as files.",
+  },
+];
+---
+<section class="section faq" id="faq">
+  <div class="container faq-grid">
+    <div class="faq-head r-up">
+      <h2>Questioned &amp;<br />answered.</h2>
+      <p class="lede">The questions I figured you'd have, answered up front. Anything I missed,
+        <a href={`${REPO_URL}/issues`} target="_blank" rel="noopener">reach out</a> or
+        <a href={REPO_URL} target="_blank" rel="noopener">read the source</a>.</p>
+    </div>
+    <div class="faq-list">
+      {faqs.map((f) => (
+        <details class="faq-item r-up">
+          <summary>
+            <span>{f.q}</span>
+            <span class="faq-mark" aria-hidden="true"></span>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .faq-grid { display: grid; grid-template-columns: 1fr; gap: clamp(32px, 5vw, 56px); align-items: start; }
+  @media (min-width: 900px) { .faq-grid { grid-template-columns: 0.8fr 1.2fr; } .faq-head { position: sticky; top: 96px; } }
+  .faq-head .lede { margin-top: 18px; }
+  .faq-head .lede a { color: var(--text); text-decoration: underline; text-underline-offset: 3px;
+    text-decoration-color: var(--accent); transition: color .2s; }
+  .faq-head .lede a:hover { color: var(--accent); }
+  .faq-list { display: flex; flex-direction: column; }
+  .faq-item { border-top: 1px solid var(--line2); }
+  .faq-item:last-child { border-bottom: 1px solid var(--line2); }
+  .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 20px 4px; cursor: pointer; list-style: none; font-size: 1.1rem; font-weight: 600; color: var(--text); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-mark { position: relative; width: 14px; height: 14px; flex: 0 0 auto; }
+  .faq-mark::before, .faq-mark::after { content: ""; position: absolute; background: var(--accent);
+    transition: transform .25s ease; }
+  .faq-mark::before { top: 6px; left: 0; width: 14px; height: 2px; }
+  .faq-mark::after { top: 0; left: 6px; width: 2px; height: 14px; }
+  .faq-item[open] .faq-mark::after { transform: scaleY(0); }
+  .faq-item p { margin: 0; padding: 0 40px 22px 4px; color: var(--text-2); max-width: 62ch; line-height: 1.6; }
+  @media (prefers-reduced-motion: reduce) { .faq-mark::before, .faq-mark::after { transition: none; } }
+</style>

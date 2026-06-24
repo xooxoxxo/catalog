@@ -1,0 +1,85 @@
+---
+// "Everything, in one list." — pinned; a name query types itself in and rows
+// that don't match drop on each keystroke. Driven by motion.ts ([data-catalog-demo]).
+const rows = [
+  { n: "ripgrep", s: "brew", tags: ["search", "rust"] },
+  { n: "fd", s: "brew", tags: ["search", "rust"] },
+  { n: "fzf", s: "brew", tags: ["search", "go"] },
+  { n: "bat", s: "brew", tags: ["view", "rust"] },
+  { n: "gitui", s: "cargo", tags: ["git", "tui"] },
+  { n: "git-delta", s: "cargo", tags: ["git", "diff"] },
+  { n: "lazygit", s: "brew", tags: ["git", "tui"] },
+  { n: "gh", s: "brew", tags: ["git", "cli"] },
+  { n: "glab", s: "brew", tags: ["git", "lab"] },
+  { n: "jq", s: "brew", tags: ["json", "c"] },
+  { n: "zoxide", s: "cargo", tags: ["nav", "rust"] },
+  { n: "gitleaks", s: "brew", tags: ["git", "sec"] },
+];
+const highlights = [
+  { label: "Multi-source scan.", desc: "Homebrew, Cargo, npm, pipx, uv, Go, Bun and the App Store." },
+  { label: "Instant search.", desc: "Fuzzy match by name or tag over a virtualized list." },
+  { label: "Group, favorite, tag.", desc: "Organize by source or tag, star what matters." },
+];
+---
+<section class="section demo" data-catalog-demo>
+  <div class="demo-stage">
+    <div class="container feat-grid">
+      <div class="feat-copy">
+        <h2>Everything, in one list.</h2>
+        <p class="lede">catalog scans every package manager on your Mac into one searchable index, so
+          the tool you only half-remember is one keystroke away.</p>
+        <ul class="feat-list">
+          {highlights.map((h) => (
+            <li><span class="feat-dot" aria-hidden="true"></span><span><b>{h.label}</b> {h.desc}</span></li>
+          ))}
+        </ul>
+      </div>
+      <div class="feat-visual">
+        <div class="sd" aria-hidden="true">
+          <div class="sd-tb">
+            <span class="sd-search"><span class="sd-q" data-sd-query></span><span class="sd-caret" data-sd-caret></span></span>
+            <span class="sd-count"><b data-sd-count>{rows.length}</b> tools</span>
+          </div>
+          <div class="sd-rows">
+            {rows.map((r) => (
+              <div class="sd-row" data-name={r.n}>
+                <span class="sd-star">★</span>
+                <span class="sd-name">{r.n}</span>
+                <span class="sd-tags">{r.tags.map((t) => <span class="sd-tag">{t}</span>)}</span>
+                <span class="sd-src mono">{r.s}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .demo { padding-block: 0; }
+  .demo-stage { min-height: 100vh; display: flex; align-items: center; padding-block: clamp(64px, 9vh, 110px); }
+
+  .sd { background: var(--surface); border: 1px solid var(--line2); border-radius: var(--radius-lg);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); overflow: hidden; }
+  .sd-tb { display: flex; align-items: center; gap: 10px; padding: 11px 13px; border-bottom: 1px solid var(--line); background: var(--bg); }
+  .sd-search { flex: 1; display: flex; align-items: center; background: var(--surface2); border: 1px solid var(--line2);
+    border-radius: var(--radius-sm); padding: 6px 11px; font-size: 13px; min-height: 30px; }
+  .sd-q { color: var(--text); font-family: var(--mono); }
+  /* Solid block caret that hard-blinks between solid and nothing (no dim state). */
+  .sd-caret { display: inline-block; width: 7px; height: 1.05em; margin-left: 1px; background: var(--accent);
+    vertical-align: text-bottom; animation: sdblink 1.06s step-end infinite; }
+  @keyframes sdblink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+  .sd-count { font-size: 11px; color: var(--text-3); font-family: var(--ui); white-space: nowrap; }
+  .sd-count b { font-family: var(--mono); color: var(--accent); }
+  .sd-row { display: grid; grid-template-columns: 14px 1fr auto auto; gap: 10px; align-items: center;
+    padding: 9px 14px; font-size: 12.5px; border-bottom: 1px solid var(--line); max-height: 60px; overflow: hidden;
+    transition: max-height .22s ease, opacity .22s ease, padding .22s ease; }
+  .sd-row.is-hidden { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; }
+  .sd-star { color: var(--text-3); font-size: 11px; }
+  .sd-name { font-weight: 500; color: var(--text); }
+  .sd-tags { display: flex; gap: 5px; }
+  .sd-tag { font-size: 9.5px; color: var(--text-3); background: var(--surface2); border: 1px solid var(--line2);
+    border-radius: var(--radius-sm); padding: 1px 6px; }
+  .sd-src { color: var(--text-3); font-size: 10.5px; }
+  @media (prefers-reduced-motion: reduce) { .sd-caret { animation: none; } .sd-row { transition: none; } }
+</style>

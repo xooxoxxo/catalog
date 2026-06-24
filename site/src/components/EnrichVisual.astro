@@ -1,0 +1,46 @@
+---
+// Shows a forgotten binary turning into an understood entry: bare row on top,
+// AI-enriched detail below. Decorative.
+---
+<div class="enrich" aria-hidden="true">
+  <div class="enrich-bare">
+    <span class="enrich-name">fd</span>
+    <span class="enrich-meta mono">brew · 10.2.0</span>
+    <span class="enrich-q">what is this?</span>
+  </div>
+  <div class="enrich-arrow mono">describe ↓</div>
+  <div class="enrich-rich">
+    <div class="enrich-rich-head">
+      <span class="enrich-name">fd</span>
+      <span class="enrich-badge mono">AI</span>
+    </div>
+    <p class="enrich-desc">A fast, user-friendly alternative to <span class="mono">find</span>: recursive,
+      respects <span class="mono">.gitignore</span>, colorized output.</p>
+    <div class="enrich-tags">
+      <span class="enrich-tag mono">cli</span>
+      <span class="enrich-tag mono">search</span>
+      <span class="enrich-tag mono">rust</span>
+      <span class="enrich-tag mono">files</span>
+    </div>
+  </div>
+</div>
+<style>
+  .enrich { background: var(--surface); border: 1px solid var(--line2); border-radius: var(--radius-lg);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .enrich-bare { display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px dashed var(--line2); border-radius: var(--radius); }
+  .enrich-name { font-weight: 600; color: var(--text); }
+  .enrich-meta { font-size: 11px; color: var(--text-3); }
+  .enrich-q { margin-left: auto; font-size: 11px; color: var(--text-3); font-style: italic; }
+  .enrich-arrow { align-self: center; font-size: 10px; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; }
+  .enrich-rich { padding: 14px; border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+    border-radius: var(--radius); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .enrich-rich-head { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
+  .enrich-badge { font-size: 9px; font-weight: 700; color: var(--accent-fg); background: var(--accent);
+    border-radius: 999px; padding: 1px 7px; letter-spacing: 0.06em; }
+  .enrich-desc { margin: 0 0 12px; font-size: 13.5px; color: var(--text); line-height: 1.5; }
+  .enrich-desc .mono { color: var(--text-2); }
+  .enrich-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .enrich-tag { font-size: 11px; color: var(--text-3); background: var(--surface2);
+    border: 1px solid var(--line2); border-radius: var(--radius-sm); padding: 2px 8px; }
+</style>

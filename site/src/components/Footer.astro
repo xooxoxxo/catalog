@@ -1,0 +1,64 @@
+---
+import OwlMark from "./OwlMark.astro";
+import { REPO_URL, RELEASES_LATEST_URL, XO_URL, JOVIAN_URL } from "../config";
+const year = 2026;
+const license = `${REPO_URL}/blob/main/LICENSE`;
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand r-up">
+        <span class="footer-mark"><OwlMark size={30} /> <img class="wm-img" src="/wordmark.png" alt="Catalog" width="1007" height="388" /></span>
+        <p class="footer-tag">Know every dev tool on your machine: what it is, whether it's safe,
+          and what's worth keeping.</p>
+        <a class="btn btn-primary footer-dl" href={RELEASES_LATEST_URL} target="_blank" rel="noopener">Download for macOS</a>
+      </div>
+      <div class="footer-cols r-up">
+        <div class="footer-col">
+          <span class="footer-col-h mono">Product</span>
+          <a href={RELEASES_LATEST_URL} target="_blank" rel="noopener">Download</a>
+          <a href="#features">Features</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-h mono">Source</span>
+          <a href={REPO_URL} target="_blank" rel="noopener">GitHub</a>
+          <a href={license} target="_blank" rel="noopener">License (MIT)</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-h mono">Made by</span>
+          <a href={XO_URL} target="_blank" rel="noopener">xo.vision</a>
+          <a href={JOVIAN_URL} target="_blank" rel="noopener">jovian.company</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <span>Built by <a href={XO_URL} target="_blank" rel="noopener">xo.vision</a>, a division of
+        <a href={JOVIAN_URL} target="_blank" rel="noopener">jovian.company</a>.</span>
+      <span>MIT licensed &middot; &copy; {year} Catalog</span>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer { border-top: 1px solid var(--line); padding-block: clamp(56px, 8vw, 96px); }
+  .footer-grid { display: grid; grid-template-columns: 1fr; gap: 48px; padding-bottom: 44px;
+    border-bottom: 1px solid var(--line); }
+  @media (min-width: 820px) { .footer-grid { grid-template-columns: 1.3fr 2fr; } }
+  .footer-mark { display: inline-flex; align-items: center; gap: 12px; color: var(--accent); }
+  .footer-mark .wm-img { height: 21px; width: auto; display: block; }
+  .footer-tag { color: var(--text-3); font-size: 0.92rem; margin: 14px 0 22px; max-width: 34ch; line-height: 1.55; }
+  .footer-dl { height: 40px; padding: 0 18px; }
+  .footer-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .footer-col { display: flex; flex-direction: column; gap: 10px; }
+  .footer-col-h { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 4px; }
+  .footer-col a { color: var(--text-2); text-decoration: none; font-size: 0.92rem; text-underline-offset: 3px; }
+  .footer-col a:hover { color: var(--text); text-decoration: underline; }
+  .footer-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+    padding-top: 24px; color: var(--text-3); font-size: 0.85rem; }
+  .footer-base a { color: var(--text-2); text-underline-offset: 3px; }
+  @media (max-width: 768px) {
+    .footer-mark .owlmark { width: 40px; height: 40px; }
+    .footer-mark .wm-img { height: 27px; }
+  }
+</style>

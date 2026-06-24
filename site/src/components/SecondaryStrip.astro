@@ -1,0 +1,86 @@
+---
+const items = [
+  {
+    icon: "disk",
+    label: "Disk usage",
+    body: "Sort every tool by the space it eats, and reclaim the gigabytes you forgot you were paying for.",
+  },
+  {
+    icon: "deps",
+    label: "Dependencies",
+    body: "See the runtimes and helpers each tool leans on, and which ones are missing.",
+  },
+  {
+    icon: "export",
+    label: "Export",
+    body: "Take your whole catalog (descriptions, tags and notes included) as one file to back up or hand off.",
+  },
+];
+---
+<section class="section strip">
+  <div class="container">
+    <h2 class="strip-title">More in the box.</h2>
+    <div class="accordion">
+      {items.map((it) => (
+        <div class="acc-slice" tabindex="0">
+          <span class="acc-icon" aria-hidden="true">
+            {it.icon === "disk" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="6" width="18" height="12" rx="2" pathLength="1" />
+                <path d="M6 12h6" pathLength="1" />
+                <circle cx="16.5" cy="12" r="1.3" fill="currentColor" stroke="none" />
+              </svg>
+            )}
+            {it.icon === "deps" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6" cy="6" r="2.4" pathLength="1" />
+                <circle cx="6" cy="18" r="2.4" pathLength="1" />
+                <circle cx="18" cy="12" r="2.4" pathLength="1" />
+                <path d="M8.1 7.2 15.6 10.9" pathLength="1" />
+                <path d="M8.1 16.8 15.6 13.1" pathLength="1" />
+              </svg>
+            )}
+            {it.icon === "export" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V4" pathLength="1" />
+                <path d="M8 8l4-4 4 4" pathLength="1" />
+                <path d="M5 14v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" pathLength="1" />
+              </svg>
+            )}
+          </span>
+          <div class="acc-content">
+            <span class="acc-label">{it.label}</span>
+            <p class="acc-body">{it.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .strip-title { margin-bottom: clamp(24px, 4vw, 44px); }
+  .accordion { display: flex; gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); overflow: hidden; min-height: 260px; }
+  .acc-slice { background: var(--bg); flex: 1; min-width: 0; padding: 26px; cursor: pointer;
+    display: flex; flex-direction: column; gap: 18px; overflow: hidden;
+    transition: flex .55s cubic-bezier(.16,1,.3,1), background-color .3s ease; }
+  .acc-slice:hover, .acc-slice:focus-visible,
+  .accordion:not(:hover):not(:focus-within) .acc-slice:first-child { flex: 3.2; background: var(--surface); }
+  .acc-icon { color: var(--accent); }
+  .acc-icon svg { width: 28px; height: 28px; }
+  .acc-content { display: flex; flex-direction: column; gap: 12px; }
+  .acc-label { font-weight: 600; font-size: 1.15rem; white-space: nowrap; }
+  .acc-body { color: var(--text-2); margin: 0; max-width: 38ch; opacity: 0;
+    transform: translateY(6px); transition: opacity .4s ease .1s, transform .4s ease .1s; }
+  .acc-slice:hover .acc-body, .acc-slice:focus-visible .acc-body,
+  .accordion:not(:hover):not(:focus-within) .acc-slice:first-child .acc-body { opacity: 1; transform: none; }
+  @media (max-width: 720px) {
+    .accordion { flex-direction: column; min-height: 0; }
+    .acc-slice, .acc-slice:hover,
+    .accordion:not(:hover):not(:focus-within) .acc-slice:first-child { flex: auto; }
+    .acc-body { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .acc-slice, .acc-body { transition: none; }
+  }
+</style>

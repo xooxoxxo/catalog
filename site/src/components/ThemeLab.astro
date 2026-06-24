@@ -1,0 +1,102 @@
+---
+import AppWindow from "./AppWindow.astro";
+// Unnamed palettes; the point is to feel the customization, not read theme names.
+const presets = [
+  { bg: "#101012", surface: "#16161a", surface2: "#1a1a1e", line: "rgba(255,255,255,.06)", line2: "rgba(255,255,255,.09)", text: "#f4f4f6", text2: "#b0b0b8", text3: "#73737d", accent: "#c4f042", accentFg: "#101012", update: "#cdef6e", danger: "#f38ba8" },
+  { bg: "#fafaf8", surface: "#ffffff", surface2: "#f3f3f0", line: "#ececea", line2: "#e3e3df", text: "#1b1b1f", text2: "#55555c", text3: "#a0a09a", accent: "#b23a64", accentFg: "#ffffff", update: "#1c7d4d", danger: "#c2415a" },
+  { bg: "#0d1117", surface: "#161b22", surface2: "#1c2330", line: "rgba(255,255,255,.06)", line2: "rgba(255,255,255,.1)", text: "#e6edf3", text2: "#9aa7b4", text3: "#6b7684", accent: "#58a6ff", accentFg: "#0d1117", update: "#3fb950", danger: "#f85149" },
+  { bg: "#1a1310", surface: "#221813", surface2: "#2a1d16", line: "rgba(255,255,255,.06)", line2: "rgba(255,255,255,.1)", text: "#f5e9e0", text2: "#c2ab9c", text3: "#8a7468", accent: "#ff7849", accentFg: "#1a1310", update: "#e3b341", danger: "#ff5c5c" },
+  { bg: "#0e1411", surface: "#141d18", surface2: "#18241e", line: "rgba(255,255,255,.06)", line2: "rgba(255,255,255,.1)", text: "#e7f0ea", text2: "#9db5a6", text3: "#6b8175", accent: "#4ade80", accentFg: "#0e1411", update: "#a3e635", danger: "#fb7185" },
+  { bg: "#14101a", surface: "#1c1626", surface2: "#221a2e", line: "rgba(255,255,255,.06)", line2: "rgba(255,255,255,.1)", text: "#efe9f5", text2: "#b6a9c6", text3: "#80738f", accent: "#c084fc", accentFg: "#14101a", update: "#a3e635", danger: "#fb7185" },
+];
+---
+<section class="section themelab" data-themelab>
+  <div class="container tl-grid">
+    <div class="tl-copy r-up">
+      <h2>Theme it your way.</h2>
+      <p class="lede">Edit any color, swap the font and corner radius, or generate a palette from a word
+        with AI. Try it on the preview, then keep up to twenty of your own and share them as a file.</p>
+      <div class="tl-controls">
+        <div class="tl-swatches" role="group" aria-label="Apply a palette">
+          {presets.map((p, i) => (
+            <button type="button" class={`tl-swatch${i === 0 ? " is-active" : ""}`} data-preset={i}
+              style={`--sw-bg:${p.bg};--sw-accent:${p.accent}`} aria-label={`Palette ${i + 1}`}></button>
+          ))}
+        </div>
+        <div class="tl-fields">
+          <label class="tl-field"><span>Accent</span><input type="color" data-accent value="#c4f042" /></label>
+          <label class="tl-field tl-field-range"><span>Corners</span><input type="range" data-radius min="0" max="22" value="14" /></label>
+          <button type="button" class="btn btn-ghost tl-shuffle" data-shuffle>Surprise me</button>
+        </div>
+      </div>
+    </div>
+    <div class="tl-preview r-up" data-theme-preview>
+      <AppWindow theme="noir" />
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ presets }}>
+  (function () {
+    var preview = document.querySelector("[data-theme-preview] .aw");
+    if (!preview) return;
+    var accent = document.querySelector("[data-accent]");
+    var radius = document.querySelector("[data-radius]");
+    var setV = function (k, v) { preview.style.setProperty(k, v); };
+    function applyPreset(p) {
+      setV("--bg", p.bg); setV("--surface", p.surface); setV("--surface2", p.surface2);
+      setV("--line", p.line); setV("--line2", p.line2); setV("--text", p.text);
+      setV("--text-2", p.text2); setV("--text-3", p.text3); setV("--accent", p.accent);
+      setV("--accent-fg", p.accentFg); setV("--update", p.update); setV("--danger", p.danger);
+      if (accent) accent.value = p.accent;
+    }
+    document.querySelectorAll(".tl-swatch").forEach(function (b) {
+      b.addEventListener("click", function () {
+        applyPreset(presets[+b.dataset.preset]);
+        document.querySelectorAll(".tl-swatch").forEach(function (o) { o.classList.toggle("is-active", o === b); });
+      });
+    });
+    if (accent) accent.addEventListener("input", function () { setV("--accent", accent.value); });
+    if (radius) radius.addEventListener("input", function () {
+      var v = +radius.value;
+      setV("--radius-lg", v + "px"); setV("--radius", Math.max(0, v - 4) + "px"); setV("--radius-sm", Math.max(0, v - 7) + "px");
+    });
+    var shuffle = document.querySelector("[data-shuffle]");
+    function hslToHex(h, s, l) {
+      s /= 100; l /= 100;
+      var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs(((h / 60) % 2) - 1)), m = l - c / 2, r = 0, g = 0, b = 0;
+      if (h < 60) { r = c; g = x; } else if (h < 120) { r = x; g = c; } else if (h < 180) { g = c; b = x; }
+      else if (h < 240) { g = x; b = c; } else if (h < 300) { r = x; b = c; } else { r = c; b = x; }
+      var to = function (n) { return ("0" + Math.round((n + m) * 255).toString(16)).slice(-2); };
+      return "#" + to(r) + to(g) + to(b);
+    }
+    if (shuffle) shuffle.addEventListener("click", function () {
+      var h = Math.floor(Math.random() * 360);
+      var hex = hslToHex(h, 80, 62);
+      setV("--accent", hex); if (accent) accent.value = hex;
+      document.querySelectorAll(".tl-swatch").forEach(function (o) { o.classList.remove("is-active"); });
+    });
+  })();
+</script>
+
+<style>
+  .tl-grid { display: grid; grid-template-columns: 1fr; gap: clamp(36px, 6vw, 64px); align-items: center; }
+  @media (min-width: 900px) { .tl-grid { grid-template-columns: 1fr 1fr; } }
+  .tl-copy .lede { margin: 18px 0 30px; }
+  .tl-controls { display: flex; flex-direction: column; gap: 20px; }
+  .tl-swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+  .tl-swatch { width: 40px; height: 40px; border-radius: 999px; cursor: pointer; padding: 0;
+    background: var(--sw-bg); border: 1px solid var(--line2); position: relative; transition: transform .15s, box-shadow .2s; }
+  .tl-swatch::after { content: ""; position: absolute; inset: 10px; border-radius: 999px; background: var(--sw-accent); }
+  .tl-swatch:hover { transform: scale(1.08); }
+  .tl-swatch.is-active { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+  .tl-fields { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .tl-field { display: inline-flex; align-items: center; gap: 9px; font-size: 0.85rem; color: var(--text-3); }
+  .tl-field input[type="color"] { width: 36px; height: 36px; padding: 0; border: 1px solid var(--line2);
+    border-radius: var(--radius-sm); background: transparent; cursor: pointer; }
+  .tl-field-range input { accent-color: var(--accent); width: 120px; cursor: pointer; }
+  .tl-shuffle { height: 36px; padding: 0 14px; font-size: 0.85rem; }
+  /* Smoothly tween the preview as tokens change. */
+  .tl-preview .aw, .tl-preview .aw * { transition: background-color .3s, color .3s, border-color .3s, box-shadow .3s; }
+  @media (prefers-reduced-motion: reduce) { .tl-preview .aw, .tl-preview .aw * { transition: none; } }
+</style>

@@ -1,0 +1,46 @@
+---
+import { formatStars } from "../lib/stars";
+import { REPO_OWNER, REPO_NAME, REPO_URL } from "../config";
+interface Props { count: number; }
+const { count } = Astro.props;
+---
+<a class="star-pill btn btn-ghost" data-stars href={REPO_URL} target="_blank" rel="noopener"
+   aria-label={`Star Catalog on GitHub, currently ${formatStars(count)} stars`}>
+  <span aria-hidden="true">★</span>
+  <b class="star-num" data-base={count}>{formatStars(count)}</b>
+  <span>on GitHub</span>
+</a>
+
+<script is:inline define:vars={{ owner: REPO_OWNER, name: REPO_NAME, base: count }}>
+  (function () {
+    // One fetch updates every pill on the page (hero, nav, footer).
+    if (window.__catStars) return;
+    window.__catStars = true;
+    var els = document.querySelectorAll("[data-stars] .star-num");
+    if (!els.length) return;
+    var fmt = function (n) { return new Intl.NumberFormat("en-US").format(n); };
+    var setAll = function (v) { var s = fmt(v); els.forEach(function (el) { el.textContent = s; }); };
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    fetch("https://api.github.com/repos/" + owner + "/" + name)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || typeof d.stargazers_count !== "number") return;
+        var target = d.stargazers_count;
+        if (reduce || target <= base) { setAll(target); return; }
+        var start = base, t0 = 0, dur = 600;
+        function tick(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min(1, (ts - t0) / dur);
+          setAll(Math.round(start + (target - start) * p));
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      })
+      .catch(function () {});
+  })();
+</script>
+
+<style>
+  .star-pill { font-family: var(--ui); }
+  .star-pill .star-num { font-family: var(--mono); }
+</style>

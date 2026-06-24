@@ -1,0 +1,30 @@
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+body, .app { margin:0; background:var(--bg); color:var(--text);
+  font-family: var(--ui); transition: background-color .2s, color .2s; }
+.app { height: 100vh; display: flex; flex-direction: column; background:var(--bg); color:var(--text); overflow-x:hidden; }
+/* slight elevation so the list reads as scrolling beneath the toolbar */
+.top { flex: 0 0 auto; position:relative; z-index:1; box-shadow:0 5px 12px -10px rgba(0,0,0,.4); }
+/* With a Favorites block, the elevation lives at the bottom of that block instead
+   (one layer, not two) — so drop the top-bar shadow when favorites are present. */
+.app:has(.favorites) .top { box-shadow:none; }
+.workspace { flex:1; display:flex; min-height:0; position:relative; }
+.main-col { flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden; padding:6px 12px 12px; }
+.main-col .list-scroll { flex:1; overflow-y:auto; overscroll-behavior:none; }
+/* slim, rounded, accent scrollbar that reserves its own gutter (no row overlap) */
+.main-col .list-scroll::-webkit-scrollbar { width:11px; }
+.main-col .list-scroll::-webkit-scrollbar-track { background:transparent; }
+.main-col .list-scroll::-webkit-scrollbar-thumb { background:color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius:999px; border:3px solid transparent; background-clip:padding-box; min-height:48px; }
+.main-col .list-scroll::-webkit-scrollbar-thumb:hover { background:color-mix(in srgb, var(--accent) 70%, transparent); }
+/* Overlay drawer: docked over the list's right edge. Takes no layout space,
+   so the list never reflows on open/close — slide is pure transform (S1/S3). */
+.sidebar { position:absolute; top:0; right:0; bottom:0; z-index:30;
+  width:min(384px, 92%); border-left:1px solid var(--line2); background:var(--surface);
+  display:flex; flex-direction:column; overflow:hidden; will-change:transform;
+  box-shadow:-22px 0 60px -28px rgba(0,0,0,.45); }
+.sidebar .detail-head { display:flex; align-items:center; gap:10px; padding:16px; border-bottom:1px solid var(--line); justify-content:space-between; }
+.sidebar .detail-head h1 { font-size:18px; font-weight:600; letter-spacing:-.01em; margin:0; flex:1; }
+.sidebar .x { width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; line-height:0; border:1px solid var(--line2); border-radius:var(--radius); color:var(--text-3); cursor:pointer; background:transparent; flex:0 0 auto; padding:0; }
+.sidebar .x svg { display:block; }
+.sidebar .x:hover { background:var(--surface2); }
+.sidebar .sc { padding:16px; overflow:auto; display:flex; flex-direction:column; gap:16px; flex:1; }

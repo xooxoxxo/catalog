@@ -1,0 +1,58 @@
+name: release
+
+# Build + package the macOS app whenever a version tag is pushed (e.g. v0.1.0),
+# then attach the .dmg/.app to a GitHub Release. The release is created as a
+# DRAFT — review the notes and click Publish. (The site download button points
+# at /releases/latest, which only resolves to published, non-draft releases.)
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Install Rust (both arches for a universal binary)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "catalog ${{ github.ref_name }}"
+          releaseBody: |
+            ## catalog ${{ github.ref_name }}
+
+            Download the `.dmg` below.
+
+            > The macOS build is **unsigned** (no Apple Developer certificate yet).
+            > On first launch macOS will warn you. Either right-click the app and
+            > choose **Open**, or clear the quarantine flag:
+            >
+            > ```
+            > xattr -dr com.apple.quarantine /Applications/catalog.app
+            > ```
+          releaseDraft: true
+          prerelease: false
+          args: --target universal-apple-darwin

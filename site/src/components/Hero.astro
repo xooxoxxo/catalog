@@ -1,0 +1,61 @@
+---
+import AppWindow from "./AppWindow.astro";
+import StarCount from "./StarCount.astro";
+import OwlMark from "./OwlMark.astro";
+import { RELEASES_LATEST_URL } from "../config";
+interface Props { stars: number; }
+const { stars } = Astro.props;
+---
+<header class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <a class="wordmark" href="/" aria-label="Catalog home">
+        <OwlMark size={56} />
+        <img class="wm-img" src="/wordmark.png" alt="" width="1007" height="388" />
+      </a>
+      <h1>Every tool<br /><span class="h1-dim">you forgot</span><br /><span class="h1-dim">you installed.</span></h1>
+      <p class="lede">Catalog indexes everything on your machine across every package manager,
+        then tells you what it does, what's out of date, and what's quietly vulnerable.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href={RELEASES_LATEST_URL} target="_blank" rel="noopener">Download for macOS</a>
+        <StarCount count={stars} />
+      </div>
+    </div>
+    <div class="hero-window" data-scan>
+      <AppWindow theme="noir" />
+      <span class="scan-line" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="hero-glow" aria-hidden="true"></div>
+</header>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding-block: clamp(56px, 9vw, 120px); }
+  .hero-grid { display: grid; grid-template-columns: 1fr; gap: clamp(40px, 6vw, 72px); align-items: center; position: relative; z-index: 1; }
+  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1fr 1.05fr; } }
+  .wordmark { display: inline-flex; align-items: center; gap: 18px; margin-bottom: 24px;
+    text-decoration: none; color: var(--accent); }
+  .wm-img { height: 40px; width: auto; display: block; }
+  .hero-copy h1 { margin-bottom: 22px; font-size: clamp(2.7rem, 6.6vw, 4.6rem); line-height: 0.98; }
+  .hero-copy h1 .h1-dim { color: var(--text-2); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .hero-glow { position: absolute; top: -20%; right: -10%; width: 60%; height: 130%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 18%, transparent), transparent 65%);
+    pointer-events: none; z-index: 0; }
+  @media (prefers-reduced-motion: reduce) { .hero-glow { opacity: .6; } }
+  /* Below the hero's stacking breakpoint, the right-offset glow leaves an ugly
+     vertical seam down a single-column layout. Wash the whole width instead. */
+  @media (max-width: 900px) {
+    .hero-glow { top: -8%; right: auto; left: 50%; transform: translateX(-50%);
+      width: 160%; height: 120%;
+      background: radial-gradient(ellipse 70% 55% at 50% 24%,
+        color-mix(in srgb, var(--accent) 16%, transparent), transparent 72%); }
+  }
+
+  /* Scan sweep — a Voltage line that passes down the window during boot.
+     Hidden until the motion script drives it; never shown without JS. */
+  .hero-window { position: relative; }
+  .scan-line { position: absolute; left: 0; right: 0; top: 0; height: 2px; opacity: 0;
+    pointer-events: none; z-index: 2; background: var(--accent);
+    box-shadow: 0 0 18px 2px color-mix(in srgb, var(--accent) 70%, transparent); }
+</style>

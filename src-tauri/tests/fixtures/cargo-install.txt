@@ -1,0 +1,4 @@
+ripgrep v14.1.0:
+    rg
+stylua v0.20.0:
+    stylua

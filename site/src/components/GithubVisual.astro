@@ -1,0 +1,31 @@
+---
+const repos = [
+  { name: "sharkdp/fd", lang: "Rust", stars: "38.1k" },
+  { name: "junegunn/fzf", lang: "Go", stars: "70.2k" },
+  { name: "BurntSushi/ripgrep", lang: "Rust", stars: "53.9k" },
+];
+---
+<div class="ghv" aria-hidden="true">
+  <div class="ghv-head mono">Starred</div>
+  {repos.map((r) => (
+    <div class="ghv-row">
+      <span class="ghv-star">★</span>
+      <span class="ghv-name">{r.name}</span>
+      <span class="ghv-lang mono">{r.lang}</span>
+      <span class="ghv-stars mono">{r.stars}</span>
+    </div>
+  ))}
+</div>
+<style>
+  .ghv { background: var(--surface); border: 1px solid var(--line2); border-radius: var(--radius-lg);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); overflow: hidden; max-width: 420px; }
+  .ghv-head { padding: 10px 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-3); border-bottom: 1px solid var(--line); background: var(--bg); }
+  .ghv-row { display: grid; grid-template-columns: 16px 1fr auto auto; gap: 12px; align-items: center;
+    padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--line); }
+  .ghv-row:last-child { border-bottom: 0; }
+  .ghv-star { color: var(--accent); }
+  .ghv-name { color: var(--text); font-weight: 500; }
+  .ghv-lang { color: var(--text-3); font-size: 11px; }
+  .ghv-stars { color: var(--text-2); font-size: 11px; }
+</style>

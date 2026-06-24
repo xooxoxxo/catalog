@@ -1,0 +1,37 @@
+:root {
+  --ui: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, monospace;
+
+  /* Paper (light) — default */
+  --bg:#fafaf8; --surface:#ffffff; --surface2:#f3f3f0;
+  --line:#ececea; --line2:#e3e3df;
+  --text:#1b1b1f; --text-2:#55555c; --text-3:#a0a09a;
+  --accent:#b23a64; --accent-fg:#ffffff;
+  --update:#1c7d4d; --orphan:#b8772a; --danger:#c2415a;
+
+  /* roundness (themeable) — sm/lg derive from --radius so one knob scales all */
+  --radius:10px;
+  --radius-sm:max(0px, calc(var(--radius) - 3px));
+  --radius-lg:calc(var(--radius) + 4px);
+
+  /* legacy aliases (existing components inherit the theme unchanged) */
+  --base:var(--bg); --overlay:var(--text-3); --mauve:var(--accent);
+}
+:root[data-theme="dark"] {
+  /* Noir (dark) */
+  --bg:#101012; --surface:#16161a; --surface2:#1a1a1e;
+  --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.09);
+  --text:#f4f4f6; --text-2:#b0b0b8; --text-3:#73737d;
+  --accent:#c4f042; --accent-fg:#101012;
+  --update:#cdef6e; --orphan:#d39b4a; --danger:#f38ba8;
+}
+/* pre-JS system default (avoids flash before useTheme runs) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg:#101012; --surface:#16161a; --surface2:#1a1a1e;
+    --line:rgba(255,255,255,.06); --line2:rgba(255,255,255,.09);
+    --text:#f4f4f6; --text-2:#b0b0b8; --text-3:#73737d;
+    --accent:#c4f042; --accent-fg:#101012;
+    --update:#cdef6e; --orphan:#d39b4a; --danger:#f38ba8;
+  }
+}

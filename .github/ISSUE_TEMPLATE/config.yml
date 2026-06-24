@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/xooxoxxo/catalog/security/advisories/new
+    about: Report a security issue privately
+  - name: Visit getcatalog.app
+    url: https://getcatalog.app
+    about: Project website and documentation

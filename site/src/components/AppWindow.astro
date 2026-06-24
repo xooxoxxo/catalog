@@ -1,0 +1,53 @@
+---
+interface Props { theme?: "noir" | "paper"; }
+const { theme = "noir" } = Astro.props;
+const rows = [
+  { name: "lazygit", src: "brew", ver: "0.44.1", active: true, update: true },
+  { name: "ripgrep", src: "brew", ver: "14.1.0" },
+  { name: "git-delta", src: "cargo", ver: "0.18.2" },
+  { name: "fzf", src: "brew", ver: "0.54.0", cve: true },
+  { name: "bat", src: "brew", ver: "0.24.0" },
+  { name: "zoxide", src: "cargo", ver: "0.9.4" },
+];
+---
+<div class={`aw ${theme === "paper" ? "theme-paper" : ""}`} data-app-window aria-hidden="true">
+  <div class="aw-tb">
+    <span class="aw-search">Search 347 tools…</span>
+    <span class="aw-pill aw-up">▲ <b data-count="12">12</b></span>
+    <span class="aw-pill aw-cve">⚠ <b data-count="2">2</b></span>
+  </div>
+  {rows.map((r) => (
+    <div class={`aw-row ${r.active ? "on" : ""}`}>
+      <span class={`aw-star ${r.active ? "lit" : ""}`}>★</span>
+      <span class="aw-name">{r.name}{r.cve && <span class="aw-flag-cve"> ⚠</span>}</span>
+      <span class="aw-src mono">{r.src}</span>
+      <span class={`aw-ver mono ${r.update ? "up" : ""}`}>{r.update ? "▲ " : ""}{r.ver}</span>
+    </div>
+  ))}
+</div>
+
+<style>
+  .aw { background: var(--surface); border: 1px solid var(--line2); border-radius: var(--radius-lg);
+    overflow: hidden; box-shadow: 0 40px 90px -30px rgba(0,0,0,.7); width: 100%; }
+  .aw-tb { display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border-bottom: 1px solid var(--line); background: var(--bg); }
+  .aw-search { flex: 1; background: var(--surface2); border: 1px solid var(--line2);
+    border-radius: var(--radius-sm); padding: 5px 10px; font-size: 12px; color: var(--text-3); }
+  .aw-pill { font-family: var(--mono); font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 999px; border: 1px solid; white-space: nowrap; }
+  .aw-pill b { font-weight: inherit; }
+  .aw-up { color: var(--update); border-color: color-mix(in srgb, var(--update) 40%, transparent); }
+  .aw-cve { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, transparent); }
+  .aw-row { display: grid; grid-template-columns: 16px 1fr auto auto; gap: 10px; align-items: center;
+    padding: 9px 14px; font-size: 12.5px; border-bottom: 1px solid var(--line); }
+  .aw-row:last-child { border-bottom: 0; }
+  .aw-row.on { background: color-mix(in srgb, var(--accent) 10%, transparent);
+    box-shadow: inset 2px 0 0 var(--accent); }
+  .aw-star { color: var(--text-3); font-size: 12px; }
+  .aw-star.lit { color: var(--accent); }
+  .aw-name { font-weight: 500; color: var(--text); }
+  .aw-flag-cve { color: var(--danger); }
+  .aw-src { color: var(--text-3); font-size: 11px; }
+  .aw-ver { color: var(--text-3); font-size: 11px; }
+  .aw-ver.up { color: var(--update); }
+</style>

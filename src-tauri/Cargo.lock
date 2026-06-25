@@ -434,7 +434,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-notification",
  "tauri-plugin-opener",
- "toml 0.8.2",
+ "toml 1.1.2+spec-1.1.0",
  "walkdir",
 ]
 

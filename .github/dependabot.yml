@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 5
     groups:
       minor-and-patch:
         update-types:
@@ -14,6 +16,8 @@ updates:
     directory: "/site"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 5
     groups:
       minor-and-patch:
         update-types:
@@ -24,6 +28,8 @@ updates:
     directory: "/src-tauri"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 5
     groups:
       minor-and-patch:
         update-types:
@@ -34,3 +40,5 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 5
